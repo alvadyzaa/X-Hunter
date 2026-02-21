@@ -1,18 +1,54 @@
 import { useAnalyzeStore } from '../store/useAnalyzeStore';
 import { useToastStore } from '../store/useToastStore';
-import { Save, Eye, EyeOff } from 'lucide-react';
+import { Save, Eye, EyeOff, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Settings() {
   const { apiKey, setApiKey, aiModel } = useAnalyzeStore();
   const [localKey, setLocalKey] = useState(apiKey);
   const [showKey, setShowKey] = useState(false);
+  const [isTesting, setIsTesting] = useState(false);
+  const [testResult, setTestResult] = useState<{status: 'idle'|'success'|'error', message: string}>({status: 'idle', message: ''});
 
   const handleSave = () => {
     setApiKey(localKey);
     const modelLabel = aiModel === 'gemini-2.0-flash' ? 'Gemini 2.0 Flash' : 
                        aiModel === 'gemini-2.0-pro-exp-02-05' ? 'Gemini 2.0 Pro Exp' : 'Gemini 1.5 Pro';
     useToastStore.getState().addToast(`Settings saved successfully! Using ${modelLabel}`, 'success');
+    useToastStore.getState().addToast(`Settings saved successfully! Using ${modelLabel}`, 'success');
+  };
+
+  const handleTestKey = async () => {
+    if (!localKey) {
+      setTestResult({ status: 'error', message: 'Please enter an API key first' });
+      return;
+    }
+    
+    setIsTesting(true);
+    setTestResult({ status: 'idle', message: '' });
+    
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${localKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: "hi" }] }], generationConfig: { maxOutputTokens: 1 } })
+      });
+      
+      if (response.ok) {
+        setTestResult({ status: 'success', message: 'API Key is Valid and has Quota left! ✨' });
+      } else if (response.status === 429) {
+        setTestResult({ status: 'error', message: 'Too Many Requests: This Key has run out of Quota.' });
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const err: any = await response.json().catch(() => ({}));
+        setTestResult({ status: 'error', message: err.error?.message || 'Invalid API Key' });
+      }
+    } catch (err: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+      console.error(err);
+      setTestResult({ status: 'error', message: 'Network error analyzing key' });
+    } finally {
+      setIsTesting(false);
+    }
   };
 
   return (
@@ -76,13 +112,33 @@ export default function Settings() {
           />
         </div>
 
-        <button 
-          onClick={handleSave}
-          className="flex items-center justify-center px-4 py-2 bg-black text-white font-medium rounded-lg hover:bg-gray-800 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
-        >
-          <Save className="w-4 h-4 mr-2" />
-          Save Settings
-        </button>
+        <div className="flex flex-col sm:flex-row gap-3 mt-4">
+          <button 
+            onClick={handleSave}
+            className="flex-1 flex items-center justify-center px-4 py-2.5 bg-black text-white text-sm font-medium rounded-lg hover:bg-gray-800 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
+          >
+            <Save className="w-4 h-4 mr-2" />
+            Save Settings
+          </button>
+          
+          <button 
+            onClick={handleTestKey}
+            disabled={isTesting}
+            className="flex-1 flex items-center justify-center px-4 py-2.5 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 flex items-center justify-center transition-all disabled:opacity-50 shadow-sm"
+          >
+            {isTesting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle2 className="w-4 h-4 mr-2" />}
+            Test Key & Check Quota
+          </button>
+        </div>
+        
+        {testResult.status !== 'idle' && (
+          <div className={`mt-4 p-4 rounded-xl flex items-start gap-3 text-sm border ${
+            testResult.status === 'success' ? 'bg-green-50 text-green-700 border-green-200' : 'bg-red-50 text-red-700 border-red-200'
+          }`}>
+            {testResult.status === 'success' ? <CheckCircle2 className="w-5 h-5 shrink-0" /> : <XCircle className="w-5 h-5 shrink-0" />}
+            <p className="font-medium">{testResult.message}</p>
+          </div>
+        )}
 
         <div className="mt-8 pt-6 border-t border-gray-100">
           <h3 className="text-md font-semibold text-gray-900 mb-3">How to get a free API Key</h3>
