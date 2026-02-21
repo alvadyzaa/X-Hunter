@@ -37,7 +37,7 @@ X-Hunter is built with modern, serverless web technologies:
 **Backend (API Proxy):**
 *   **Cloudflare Workers**: Edge computing platform for low-latency, serverless API execution.
 *   **Hono**: Extremely fast, lightweight web framework built for Edge runtimes.
-*   **Google Gemini API (`gemini-2.5-flash`)**: The core LLM powering the analysis and generation.
+*   **Google Gemini API (`gemini-2.0-flash`)**: The core LLM powering the analysis and generation.
 
 ---
 
