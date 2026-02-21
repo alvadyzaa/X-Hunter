@@ -1,0 +1,10 @@
+name = "pre-tweet-api"
+main = "src/index.ts"
+compatibility_date = "2024-03-20"
+
+# [vars]
+# GEMINI_API_KEY = "your-api-key-here"
+
+# [[kv_namespaces]]
+# binding = "ANALYSIS_CACHE"
+# id = "your-kv-namespace-id"

@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.env
+.DS_Store
+*.log
+.next/
+out/
+build/
+.svelte-kit/
+.vercel
+.wrangler/
+coverage
