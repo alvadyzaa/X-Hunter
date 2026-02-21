@@ -18,8 +18,20 @@ It leverages the power of the **Google Gemini API** through a secure Cloudflare 
 *   **🎭 Custom AI Personas**: Inject custom prompt instructions (e.g., "Write like Naval Ravikant" or "Gunakan bahasa gaul Jaksel") via the Template Manager in Settings.
 *   **🔄 Tone Rewriter**: Instantly rewrite drafts into *Safer*, *Viral*, or *Controversial* tones.
 *   **📉 Quota Tracking**: Visual badge to monitor your Gemini API Free Tier limits (15 requests/minute).
+*   **🔑 API Key Validation**: Built-in checker to verify your Gemini API key validity and quota status directly from the settings.
 *   **💾 Local History & Caching**: All generated analyses are cached in your browser's Local Storage. Searching old topics costs **0 API credits**.
 *   **📄 Export to PDF**: Download your analysis reports as beautifully formatted PDF documents.
+
+---
+
+## 🚀 Getting Started / How to Use
+
+**IMPORTANT:** X-Hunter is powered by the **Google Gemini 2.0 Flash** model (`gemini-2.0-flash`). To use the analysis and generation features, you **must provide your own Gemini API Key**.
+
+1.  **Get an API Key**: If you don't have one, get a free Gemini API key from [Google AI Studio](https://aistudio.google.com/).
+2.  **Enter your Key**: Open the **[Settings](#)** menu in X-Hunter.
+3.  **Validate & Save**: Paste your API key into the input field and click "Check API & Save". The built-in checker will verify if your key is valid and has available quota for the `gemini-2.0-flash` model.
+4.  **Start Hunting**: Once saved, head to the Dashboard or Analyze page and start crafting your viral tweets!
 
 ---
 
