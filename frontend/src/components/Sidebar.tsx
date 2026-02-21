@@ -4,12 +4,20 @@ import { useAnalyzeStore } from '../store/useAnalyzeStore';
 
 export default function Sidebar() {
   const location = useLocation();
-  const { resetState, isSidebarOpen, setSidebarOpen } = useAnalyzeStore();
+  const { resetState, isSidebarOpen, setSidebarOpen, language } = useAnalyzeStore();
+
+  const t = {
+    dashboard: language === 'id' ? 'Beranda' : 'Dashboard',
+    history: language === 'id' ? 'Riwayat' : 'History',
+    settings: language === 'id' ? 'Pengaturan' : 'Settings',
+    newAnalysis: language === 'id' ? 'Analisis Baru' : 'New Analysis',
+    subtitle: language === 'id' ? 'Taklukkan Algoritma' : 'Hunt the Algorithm'
+  };
 
   const navItems = [
-    { name: 'Dashboard', path: '/', icon: Home },
-    { name: 'History', path: '/analyze', icon: Clock },
-    { name: 'Settings', path: '/settings', icon: SettingsIcon },
+    { name: t.dashboard, path: '/', icon: Home },
+    { name: t.history, path: '/analyze', icon: Clock },
+    { name: t.settings, path: '/settings', icon: SettingsIcon },
   ];
 
   return (
@@ -29,7 +37,7 @@ export default function Sidebar() {
               <span className="px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-blue-700 bg-blue-100 rounded border border-blue-200">ALPHA</span>
             </div>
             <p className="text-[11px] text-gray-500 mt-1">
-              Hunt the Algorithm by <a href="https://x.com/miegrains" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Keith</a>
+              {t.subtitle} <span className="opacity-70">by</span> <a href="https://x.com/miegrains" target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">Keith</a>
             </p>
           </div>
           <button onClick={() => setSidebarOpen(false)} className="md:hidden text-gray-500 hover:text-gray-900 p-1 -mt-4">
@@ -38,12 +46,12 @@ export default function Sidebar() {
         </div>
         
         <Link 
-          to="/analyze" 
+          to="/" 
           onClick={() => { resetState(); setSidebarOpen(false); }}
           className="flex items-center justify-center w-full px-4 py-2 mb-6 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800 transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
         >
           <Plus className="w-4 h-4 mr-2" />
-          New Analysis
+          {t.newAnalysis}
         </Link>
 
         <nav className="flex flex-col space-y-1">

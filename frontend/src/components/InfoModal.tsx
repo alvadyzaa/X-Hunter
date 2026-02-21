@@ -1,10 +1,12 @@
-import { X, Sparkles, Zap, BrainCircuit, History, AlertTriangle, FileText, Settings } from 'lucide-react';
+import { X, Sparkles, Zap, BrainCircuit, History, AlertTriangle, FileText, Settings, Key } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useAnalyzeStore } from '../store/useAnalyzeStore';
 
 type ModalType = 'how-to' | 'disclaimer' | 'changelog';
 
 export default function InfoModal({ isOpen, onClose, type }: { isOpen: boolean, onClose: () => void, type: ModalType }) {
   const [isVisible, setIsVisible] = useState(false);
+  const language = useAnalyzeStore((state) => state.language);
 
   useEffect(() => {
     if (isOpen) {
@@ -89,23 +91,50 @@ export default function InfoModal({ isOpen, onClose, type }: { isOpen: boolean, 
     return (
       <div className="space-y-6">
         <p className="text-gray-600 leading-relaxed text-sm">
-          Maximize your Free Tier Gemini API quota (15 requests per minute) with these advanced features built directly into X-Hunter.
+          {language === 'id' 
+            ? 'Maksimalkan kuota gratis Gemini API (15 request per menit) dengan fitur canggih bawaan X-Hunter ini.'
+            : 'Maximize your Free Tier Gemini API quota (15 requests per minute) with these advanced features built directly into X-Hunter.'}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-5 bg-orange-50/50 rounded-xl border border-orange-100 col-span-1 md:col-span-2">
+            <div className="flex items-start gap-3">
+              <Key className="w-6 h-6 text-orange-500 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">{language === 'id' ? 'WAJIB: API Key Gemini' : 'REQUIRED: Gemini API Key'}</h3>
+                <p className="text-xs text-gray-600 leading-relaxed mb-3">
+                  {language === 'id' 
+                    ? 'Aplikasi ini ditenagai oleh Google Gemini 2.0 Flash. Anda wajib memasukkan API Key milik Anda sendiri agar fitur analisis bisa berjalan.'
+                    : 'This app is powered by Google Gemini 2.0 Flash. You must provide your own API Key to use the analysis and generation features.'}
+                </p>
+                <a 
+                  href="/settings"
+                  onClick={onClose}
+                  className="inline-block text-xs font-medium text-orange-600 bg-orange-100 hover:bg-orange-200 px-3 py-1.5 rounded-md transition-colors"
+                >
+                  {language === 'id' ? 'Atur API Key di Pengaturan →' : 'Configure API Key in Settings →'}
+                </a>
+              </div>
+            </div>
+          </div>
+
           <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
             <History className="w-6 h-6 text-blue-500 mb-3" />
-            <h3 className="font-semibold text-gray-900 mb-2">History & Search (0 API)</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">{language === 'id' ? 'Riwayat & Cari (0 API)' : 'History & Search (0 API)'}</h3>
             <p className="text-xs text-gray-600 leading-relaxed">
-              When you analyze, results save to History. Use the <strong>Search</strong> bar to quickly find past topics. Re-loading a cached query saves your API quota.
+              {language === 'id' 
+                ? 'Hasil analisa otomatis tersimpan ke Riwayat. Pakai kolom Cari untuk nyari topik lama. Langsung dimuat dari browser, hemat kuota API Anda!'
+                : 'When you analyze, results save to History. Use the Search bar to quickly find past topics. Re-loading a cached query saves your API quota.'}
             </p>
           </div>
           
           <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
             <Settings className="w-6 h-6 text-purple-500 mb-3" />
-            <h3 className="font-semibold text-gray-900 mb-2">Custom AI Personas</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">{language === 'id' ? 'Persona Custom AI' : 'Custom AI Personas'}</h3>
             <p className="text-xs text-gray-600 leading-relaxed">
-              Head securely to Settings to configure your <strong>Template Manager</strong>. You can inject custom prompt instructions like "Write in the voice of Elon Musk".
+              {language === 'id'
+                ? 'Buka Pengaturan untuk mengatur Manajer Template. Kamu bisa masukkan instruksi prompt khusus seperti "Tulis gaya bahasa Elon Musk".'
+                : 'Head securely to Settings to configure your Template Manager. You can inject custom prompt instructions like "Write in the voice of Elon Musk".'}
             </p>
           </div>
         </div>
@@ -113,17 +142,21 @@ export default function InfoModal({ isOpen, onClose, type }: { isOpen: boolean, 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">
             <Zap className="w-6 h-6 text-yellow-500 mb-3" />
-            <h3 className="font-semibold text-gray-900 mb-2">Smart Quota Tracking</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">{language === 'id' ? 'Pelacak Kuota Pintar' : 'Smart Quota Tracking'}</h3>
             <p className="text-xs text-gray-600 leading-relaxed">
-              Hover over the quota badge (e.g., 15/15) to see precisely when your throttled API requests will refresh (60 seconds recovery rate).
+              {language === 'id'
+                ? 'Arahkan kursor ke badge kuota (misal 15/15) untuk melihat kapan request API kamu bakal kerestore penuh (kecepatan refresh 60 detik).'
+                : 'Hover over the quota badge (e.g., 15/15) to see precisely when your throttled API requests will refresh (60 seconds recovery rate).'}
             </p>
           </div>
 
           <div className="p-5 bg-blue-50/50 rounded-xl border border-blue-100">
             <BrainCircuit className="w-6 h-6 text-black mb-3" />
-            <h3 className="font-semibold text-gray-900 mb-2">Zero-API Brainstorm</h3>
+            <h3 className="font-semibold text-gray-900 mb-2">{language === 'id' ? 'Brainstorm Tanpa API' : 'Zero-API Brainstorm'}</h3>
             <p className="text-xs text-gray-600 leading-relaxed">
-              Use the "Local Brainstorm" option to generate dozen of viral hook formulas locally in your browser. Costs 0 API credits!
+              {language === 'id'
+                ? 'Mulai dari kosong? Pakai opsi "Brainstorm Lokal" untuk membuat belasan formula viral instan di browser. Bebas pulsa 0 kuota API!'
+                : 'Use the "Local Brainstorm" option to generate dozen of viral hook formulas locally in your browser. Costs 0 API credits!'}
             </p>
           </div>
         </div>
@@ -132,7 +165,7 @@ export default function InfoModal({ isOpen, onClose, type }: { isOpen: boolean, 
   };
 
   const titles = {
-    'how-to': { icon: Sparkles, text: 'How to Use X-Hunter', color: 'text-yellow-600', bg: 'bg-yellow-100' },
+    'how-to': { icon: Sparkles, text: language === 'id' ? 'Cara Pakai X-Hunter' : 'How to Use X-Hunter', color: 'text-yellow-600', bg: 'bg-yellow-100' },
     'disclaimer': { icon: AlertTriangle, text: 'Disclaimer', color: 'text-red-600', bg: 'bg-red-100' },
     'changelog': { icon: FileText, text: 'Changelog', color: 'text-gray-700', bg: 'bg-gray-200' },
   };
@@ -173,7 +206,7 @@ export default function InfoModal({ isOpen, onClose, type }: { isOpen: boolean, 
             onClick={onClose}
             className="px-6 py-2.5 bg-black text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
           >
-            {type === 'disclaimer' ? 'Saya Mengerti' : 'Got it, thanks!'}
+            {type === 'disclaimer' ? (language === 'id' ? 'Saya Mengerti' : 'I Understand') : (language === 'id' ? 'Sip, terima kasih!' : 'Got it, thanks!')}
           </button>
         </div>
       </div>

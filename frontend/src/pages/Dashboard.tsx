@@ -7,9 +7,23 @@ import { useState } from 'react';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const { inputText, setAnalysisResult, apiKey, aiModel } = useAnalyzeStore();
+  const { inputText, setAnalysisResult, apiKey, aiModel, language } = useAnalyzeStore();
   const [brainstormIdeas, setBrainstormIdeas] = useState<string[]>([]);
   const [originalKeyword, setOriginalKeyword] = useState<string>('');
+
+  const t = {
+    morning: language === 'id' ? 'Selamat Pagi' : 'Good Morning',
+    afternoon: language === 'id' ? 'Selamat Siang' : 'Good Afternoon',
+    evening: language === 'id' ? 'Selamat Malam' : 'Good Evening',
+    peeps: language === 'id' ? 'Kawan' : 'Peeps',
+    subtitle: language === 'id' ? 'Apa rencana tweet kamu hari ini?' : 'What are you planning to tweet today?',
+    brainstorm: language === 'id' ? 'Ide Brainstorm untuk' : 'Brainstorm Ideas for',
+    clickToUse: language === 'id' ? 'Klik untuk pakai ide ini' : 'Click to use this idea',
+    analyzeTopic: language === 'id' ? 'Analisa topik' : 'Analyze topic',
+    evaluateDraft: language === 'id' ? 'Evaluasi draft' : 'Evaluate draft',
+    localBrainstorm: language === 'id' ? 'Brainstorm Lokal' : 'Local Brainstorm',
+    generateIdeas: language === 'id' ? 'Buat ide dari keyword (0 Kuota API)' : 'Generate ideas from your keyword (0 API Cost)',
+  };
 
   const mutation = useMutation({
     mutationFn: analyzePost,
@@ -29,9 +43,9 @@ export default function Dashboard() {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) return 'Good Morning';
-    if (hour < 18) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return t.morning;
+    if (hour < 18) return t.afternoon;
+    return t.evening;
   };
 
   const handleBrainstorm = () => {
@@ -93,8 +107,8 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col items-center flex-start pt-16 md:pt-24 min-h-[80vh] px-4">
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">{getGreeting()}, Peeps</h1>
-      <p className="text-gray-500 mb-10 text-center">What are you planning to tweet today?</p>
+      <h1 className="text-3xl font-bold text-gray-900 mb-2">{getGreeting()}, {t.peeps}</h1>
+      <p className="text-gray-500 mb-10 text-center">{t.subtitle}</p>
       
       <InputBox 
         onSubmit={() => {
@@ -108,7 +122,7 @@ export default function Dashboard() {
       {brainstormIdeas.length > 0 && (
         <div className="w-full max-w-3xl mt-6 space-y-3">
           <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
-            <span role="img" aria-label="sparkles">✨</span> Brainstorm Ideas for "{originalKeyword}"
+            <span role="img" aria-label="sparkles">✨</span> {t.brainstorm} "{originalKeyword}"
           </h3>
           <div className="grid grid-cols-1 gap-3">
             {brainstormIdeas.map((idea, idx) => (
@@ -118,7 +132,7 @@ export default function Dashboard() {
                 className="p-4 bg-white border border-blue-100 rounded-xl cursor-pointer shadow-sm hover:shadow-md hover:border-blue-400 hover:-translate-y-0.5 transition-all group"
               >
                 <p className="text-sm text-gray-800 group-hover:text-blue-900 font-medium">{idea}</p>
-                <div className="mt-2 text-xs text-blue-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity">Click to use this idea</div>
+                <div className="mt-2 text-xs text-blue-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity">{t.clickToUse}</div>
               </div>
             ))}
           </div>
@@ -134,7 +148,7 @@ export default function Dashboard() {
           }}
           className="p-4 bg-white border border-gray-100 rounded-xl cursor-pointer shadow-sm hover:shadow-md hover:border-gray-300 hover:-translate-y-0.5 transition-all"
         >
-          <h4 className="text-sm font-medium text-gray-900 mb-1">Analyze topic</h4>
+          <h4 className="text-sm font-medium text-gray-900 mb-1">{t.analyzeTopic}</h4>
           <p className="text-xs text-gray-500">"AI in Web3"</p>
         </div>
         <div 
@@ -145,7 +159,7 @@ export default function Dashboard() {
           }}
           className="p-4 bg-white border border-gray-100 rounded-xl cursor-pointer shadow-sm hover:shadow-md hover:border-gray-300 hover:-translate-y-0.5 transition-all"
         >
-          <h4 className="text-sm font-medium text-gray-900 mb-1">Evaluate draft</h4>
+          <h4 className="text-sm font-medium text-gray-900 mb-1">{t.evaluateDraft}</h4>
           <p className="text-xs text-gray-500 line-clamp-1">5 steps to scale your SaaS over the next 90 days:</p>
         </div>
         <div 
@@ -153,9 +167,9 @@ export default function Dashboard() {
           className="p-4 bg-blue-50/50 border border-blue-100 rounded-xl cursor-pointer shadow-sm hover:shadow-md hover:border-blue-300 hover:-translate-y-0.5 transition-all"
         >
           <h4 className="text-sm font-medium text-blue-900 mb-1 flex items-center gap-1.5">
-            <span role="img" aria-label="brain">🧠</span> Local Brainstorm
+            <span role="img" aria-label="brain">🧠</span> {t.localBrainstorm}
           </h4>
-          <p className="text-xs text-blue-600/80">Generate ideas from your keyword (0 API Cost)</p>
+          <p className="text-xs text-blue-600/80">{t.generateIdeas}</p>
         </div>
       </div>
     </div>

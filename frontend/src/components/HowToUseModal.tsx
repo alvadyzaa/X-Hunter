@@ -1,4 +1,4 @@
-import { X, Sparkles, Zap, BrainCircuit, History } from 'lucide-react';
+import { X, Sparkles, Zap, BrainCircuit, History, Key } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 export default function HowToUseModal({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) {
@@ -44,6 +44,25 @@ export default function HowToUseModal({ isOpen, onClose }: { isOpen: boolean, on
           <p className="text-gray-600 leading-relaxed text-sm">
             Maximize your Free Tier Gemini API quota (15 requests per minute) with these advanced features built directly into X-Hunter.
           </p>
+
+          <div className="p-5 bg-orange-50/50 rounded-xl border border-orange-100">
+            <div className="flex items-start gap-3">
+              <Key className="w-6 h-6 text-orange-500 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="font-semibold text-gray-900 mb-2">1. Required: Gemini API Key</h3>
+                <p className="text-xs text-gray-600 leading-relaxed mb-3">
+                  X-Hunter requires a Google Gemini API Key to function. It uses the `gemini-2.0-flash` model. You must provide your own key.
+                </p>
+                <a 
+                  href="/settings"
+                  onClick={onClose}
+                  className="inline-block text-xs font-medium text-orange-600 bg-orange-100 hover:bg-orange-200 px-3 py-1.5 rounded-md transition-colors"
+                >
+                  Configure API Key in Settings →
+                </a>
+              </div>
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-5 bg-gray-50 rounded-xl border border-gray-100">

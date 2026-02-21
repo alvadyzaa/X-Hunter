@@ -22,14 +22,13 @@ export const analyzePost = async ({ text, apiKey, model }: { text: string, apiKe
   if (apiKey) {
     headers['X-Gemini-Key'] = apiKey;
   }
-  if (model) {
-    headers['X-Gemini-Model'] = model;
-  }
+  // Hardcode safely to avoid localStorage cached old models
+  headers['X-Gemini-Model'] = 'gemini-2.5-flash-lite';
 
   const response = await fetch(`${API_BASE_URL}/api/analyze`, {
     method: 'POST',
     headers,
-    body: JSON.stringify({ text, customPersona: store.customPersona }),
+    body: JSON.stringify({ text, customPersona: store.customPersona, language: store.language }),
   });
 
   if (!response.ok) {
@@ -68,13 +67,18 @@ const _generateContent = async (endpoint: string, payload: any, enableCache = fa
     headers['X-Gemini-Key'] = payload.apiKey;
     delete payload.apiKey; // Don't send API key in body
   }
+  
+  // Hardcode safely to avoid localStorage cached old models
+  headers['X-Gemini-Model'] = 'gemini-2.5-flash-lite';
   if (payload.model) {
-    headers['X-Gemini-Model'] = payload.model;
     delete payload.model;
   }
 
   if (store.customPersona) {
     payload.customPersona = store.customPersona;
+  }
+  if (store.language) {
+    payload.language = store.language;
   }
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {

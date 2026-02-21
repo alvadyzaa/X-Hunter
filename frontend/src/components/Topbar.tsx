@@ -1,13 +1,21 @@
-import { Menu, Zap, Info, AlertTriangle, FileText } from 'lucide-react';
+import { Menu, Zap, Info, AlertTriangle, FileText, Globe } from 'lucide-react';
 import { useAnalyzeStore } from '../store/useAnalyzeStore';
 import { useEffect, useState } from 'react';
 import InfoModal from './InfoModal';
 
 export default function Topbar() {
-  const { setSidebarOpen, apiUsage } = useAnalyzeStore();
+  const { setSidebarOpen, apiUsage, language, setLanguage } = useAnalyzeStore();
   const [quota, setQuota] = useState(15);
   const [nextReset, setNextReset] = useState<number | null>(null);
-  
+
+  const t = {
+    howTo: language === 'id' ? 'Cara Pakai?' : 'How to Use?',
+    disclaimer: language === 'id' ? 'Peringatan' : 'Disclaimer',
+    changelog: language === 'id' ? 'Pembaruan' : 'Changelog',
+    apiQuota: language === 'id' ? 'Sisa Kuota API: ' : 'Free Tier API Quota: ',
+    api: language === 'id' ? 'API: ' : 'API: '
+  };
+
   const [modalState, setModalState] = useState<{isOpen: boolean, type: 'how-to' | 'disclaimer' | 'changelog'}>({
     isOpen: false, type: 'how-to'
   });
@@ -43,7 +51,7 @@ export default function Topbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex items-center justify-between w-full h-16 px-4 md:px-6 bg-gray-50/90 backdrop-blur-sm border-b border-gray-100 flex-wrap gap-y-2">
+      <header className="sticky top-0 z-30 flex items-center justify-between w-full h-auto py-3 md:py-4 px-4 md:px-6 bg-white/95 backdrop-blur-md border-b border-gray-100 flex-wrap gap-y-3 shadow-sm">
         <div className="flex items-center">
           <button 
             onClick={() => setSidebarOpen(true)}
@@ -51,44 +59,54 @@ export default function Topbar() {
           >
             <Menu className="w-6 h-6" />
           </button>
-          <div className="hidden sm:flex items-center gap-1">
+          <div className="hidden md:flex items-center gap-3 md:gap-4 ml-2 mt-1">
             <button 
               onClick={() => openModal('how-to')}
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+              className="text-sm font-semibold text-gray-700 hover:text-gray-900 flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all active:scale-95"
             >
-              <Info className="w-4 h-4" />
-              How to Use?
+              <Info className="w-4 h-4 text-blue-500" />
+              {t.howTo}
             </button>
             <button 
               onClick={() => openModal('disclaimer')}
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+              className="text-sm font-semibold text-gray-700 hover:text-gray-900 flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all active:scale-95"
             >
-              <AlertTriangle className="w-4 h-4" />
-              Disclaimer
+              <AlertTriangle className="w-4 h-4 text-yellow-500" />
+              {t.disclaimer}
             </button>
             <button 
               onClick={() => openModal('changelog')}
-              className="text-sm font-medium text-gray-600 hover:text-gray-900 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-gray-100 transition-colors"
+              className="text-sm font-semibold text-gray-700 hover:text-gray-900 flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all active:scale-95"
             >
-              <FileText className="w-4 h-4" />
-              Changelog
+              <FileText className="w-4 h-4 text-gray-500" />
+              {t.changelog}
             </button>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 md:mt-1">
           {/* Mobile menu triggers */}
-          <div className="sm:hidden flex items-center mr-2">
-             <button onClick={() => openModal('disclaimer')} className="p-1.5 text-gray-500"><AlertTriangle className="w-4 h-4" /></button>
-             <button onClick={() => openModal('how-to')} className="p-1.5 text-gray-500"><Info className="w-4 h-4" /></button>
+          <div className="md:hidden flex items-center gap-2 mr-1">
+             <button onClick={() => openModal('disclaimer')} className="p-2 bg-white border border-gray-200 shadow-sm text-gray-600 hover:text-gray-900 rounded-xl transition-all active:scale-95"><AlertTriangle className="w-4 h-4 text-yellow-500" /></button>
+             <button onClick={() => openModal('how-to')} className="p-2 bg-white border border-gray-200 shadow-sm text-gray-600 hover:text-gray-900 rounded-xl transition-all active:scale-95"><Info className="w-4 h-4 text-blue-500" /></button>
           </div>
+          
+          <button 
+            onClick={() => setLanguage(language === 'id' ? 'en' : 'id')}
+            title={language === 'id' ? 'Ganti ke Bahasa Inggris' : 'Switch to Indonesian'}
+            className="flex items-center gap-1.5 px-3 py-2 bg-white border border-gray-200 shadow-sm text-gray-700 hover:text-gray-900 font-semibold text-xs md:text-sm rounded-xl transition-all active:scale-95"
+          >
+            <Globe className="w-4 h-4 text-indigo-500" />
+            <span className="uppercase">{language}</span>
+          </button>
+
           <div 
             title={nextReset !== null ? `Next quota refresh in ${nextReset} seconds` : "Full quota available"}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors cursor-help ${quota <= 2 ? 'bg-red-50 text-red-600 border-red-200' : 'bg-white text-gray-700 border-gray-200 shadow-sm hover:shadow'}`}
+            className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-xl text-xs md:text-sm font-semibold border transition-all cursor-help ${quota <= 2 ? 'bg-red-50 text-red-600 border-red-200 shadow-sm' : 'bg-white text-gray-700 border-gray-200 shadow-sm hover:shadow-md'}`}
           >
-            <Zap className={`w-3.5 h-3.5 ${quota <= 2 ? 'text-red-500' : 'text-yellow-500'}`} fill="currentColor" />
+            <Zap className={`w-4 h-4 ${quota <= 2 ? 'text-red-500' : 'text-yellow-500'}`} fill="currentColor" />
             <span>
-              <span className="hidden sm:inline">Free Tier API Quota: </span>
-              <span className="sm:hidden">API: </span>
+              <span className="hidden sm:inline">{t.apiQuota}</span>
+              <span className="sm:hidden">{t.api}</span>
               {Math.max(0, quota)}/15
             </span>
           </div>
