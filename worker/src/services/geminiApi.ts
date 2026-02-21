@@ -1,4 +1,4 @@
-export const callGeminiJSON = async (apiKey: string, prompt: string, model: string = 'gemini-2.5-flash') => {
+export const callGeminiJSON = async (apiKey: string, prompt: string, model: string = 'gemini-2.5-flash-lite') => {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   const payload = {
@@ -25,7 +25,7 @@ export const callGeminiJSON = async (apiKey: string, prompt: string, model: stri
   return JSON.parse(rawText);
 };
 
-export const callGeminiText = async (apiKey: string, prompt: string, model: string = 'gemini-2.5-flash') => {
+export const callGeminiText = async (apiKey: string, prompt: string, model: string = 'gemini-2.5-flash-lite') => {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
   const payload = {

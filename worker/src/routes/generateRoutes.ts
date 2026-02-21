@@ -15,7 +15,7 @@ export const generateRoutes = new Hono<{ Bindings: { GEMINI_API_KEY: string } }>
 const handleGenerateRequest = async (c: any, buildPromptFn: (text: string, ...args: any[]) => string, extraArgs: any[] = []) => {
   try {
     const body = await c.req.json();
-    const { text, customPersona } = body;
+    const { text, customPersona, language } = body;
     
     if (!text || typeof text !== 'string') {
       return c.json({ error: 'Text input is required' }, 400);
@@ -24,13 +24,13 @@ const handleGenerateRequest = async (c: any, buildPromptFn: (text: string, ...ar
     const providedKey = c.req.header('X-Gemini-Key');
     const defaultKey = c.env.GEMINI_API_KEY;
     const apiKey = providedKey || defaultKey;
-    const model = c.req.header('X-Gemini-Model') || 'gemini-2.5-flash';
+    const model = c.req.header('X-Gemini-Model') || 'gemini-2.0-flash';
     
     if (!apiKey) {
       return c.json({ error: 'Gemini API key not configured or provided' }, 500);
     }
 
-    const prompt = buildPromptFn(text, ...extraArgs, customPersona);
+    const prompt = buildPromptFn(text, ...extraArgs, language, customPersona);
     const resultText = await callGeminiText(apiKey, prompt, model);
 
     return c.json({ result: resultText });
