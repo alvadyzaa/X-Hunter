@@ -41,7 +41,7 @@ export const useAnalyzeStore = create<AnalyzeState>()(
       setAnalysisResult: (result) => set({ analysisResult: result }),
       apiKey: '',
       setApiKey: (key) => set({ apiKey: key }),
-      aiModel: 'gemini-2.5-flash',
+      aiModel: 'gemini-2.0-flash',
       setAiModel: (model) => set({ aiModel: model }),
       customPersona: '',
       setCustomPersona: (persona) => set({ customPersona: persona }),

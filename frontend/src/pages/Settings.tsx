@@ -10,8 +10,8 @@ export default function Settings() {
 
   const handleSave = () => {
     setApiKey(localKey);
-    const modelLabel = aiModel === 'gemini-2.5-flash' ? 'Gemini 2.5 Flash' : 
-                       aiModel === 'gemini-2.5-pro' ? 'Gemini 2.5 Pro' : 'Gemini 1.5 Pro';
+    const modelLabel = aiModel === 'gemini-2.0-flash' ? 'Gemini 2.0 Flash' : 
+                       aiModel === 'gemini-2.0-pro-exp-02-05' ? 'Gemini 2.0 Pro Exp' : 'Gemini 1.5 Pro';
     useToastStore.getState().addToast(`Settings saved successfully! Using ${modelLabel}`, 'success');
   };
 
@@ -52,8 +52,8 @@ export default function Settings() {
             onChange={(e) => useAnalyzeStore.getState().setAiModel(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-black outline-none transition-all bg-white"
           >
-            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Fast, Free Tier Default)</option>
-            <option value="gemini-2.5-pro">Gemini 2.5 Pro (Powerful, Higher Request Limit with Paid Key)</option>
+            <option value="gemini-2.0-flash">Gemini 2.0 Flash (Fast, Free Tier Default)</option>
+            <option value="gemini-2.0-pro-exp-02-05">Gemini 2.0 Pro Exp (Powerful, Higher Request Limit with Paid Key)</option>
             <option value="gemini-1.5-pro">Gemini 1.5 Pro (Legacy Pro, Larger Context)</option>
           </select>
           <p className="text-xs text-gray-500 mt-2">
